@@ -13,27 +13,20 @@
  */
 package com.unitvectory.serviceauthcentral.client;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import org.junit.jupiter.api.Test;
-
 /**
- * Test class for SACTokenResponse class.
+ * The SACJwtBearerProvider interface provides the means to load in the JWT for
+ * the jwt-bearer flow.
  * 
  * @author Jared Hatfield (UnitVectorY Labs)
  */
-public class SACTokenResponseTest {
-    
-    @Test
-    public void test(){
-        SACTokenResponse response = SACTokenResponse.builder()
-            .accessToken("token")
-            .expiresIn(1000)
-            .tokenType("type")
-            .build();
-        
-        assertEquals("token", response.getAccessToken());
-        assertEquals(1000, response.getExpiresIn());
-        assertEquals("type", response.getTokenType());
-    }
+public interface SACJwtBearerProvider {
+
+    /**
+     * Get the JWT assertion for the jwt-bearer flow.
+     * 
+     * @param params the jwt-bearer parameters
+     * @return the JWT assertion to be passed to the ServiceAuthCentral in the
+     *         jwt-bearer flow
+     */
+    String getJwtAssertion(SACJwtBearerParams params);
 }

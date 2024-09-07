@@ -13,27 +13,20 @@
  */
 package com.unitvectory.serviceauthcentral.client;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import org.junit.jupiter.api.Test;
+import lombok.Builder;
+import lombok.Value;
 
 /**
- * Test class for SACTokenResponse class.
+ * The SACJwtBearerParams class provides the parameters for the jwt-bearer flow.
  * 
  * @author Jared Hatfield (UnitVectorY Labs)
  */
-public class SACTokenResponseTest {
-    
-    @Test
-    public void test(){
-        SACTokenResponse response = SACTokenResponse.builder()
-            .accessToken("token")
-            .expiresIn(1000)
-            .tokenType("type")
-            .build();
-        
-        assertEquals("token", response.getAccessToken());
-        assertEquals(1000, response.getExpiresIn());
-        assertEquals("type", response.getTokenType());
-    }
+@Value
+@Builder
+public class SACJwtBearerParams {
+
+    /**
+     * The audience
+     */
+    String audience;
 }

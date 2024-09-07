@@ -13,27 +13,23 @@
  */
 package com.unitvectory.serviceauthcentral.client;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import org.junit.jupiter.api.Test;
-
 /**
- * Test class for SACTokenResponse class.
+ * The SACClientCredentialsProvider interface provides the means to load in the
+ * client id and client secret.
  * 
  * @author Jared Hatfield (UnitVectorY Labs)
  */
-public class SACTokenResponseTest {
-    
-    @Test
-    public void test(){
-        SACTokenResponse response = SACTokenResponse.builder()
-            .accessToken("token")
-            .expiresIn(1000)
-            .tokenType("type")
-            .build();
-        
-        assertEquals("token", response.getAccessToken());
-        assertEquals(1000, response.getExpiresIn());
-        assertEquals("type", response.getTokenType());
-    }
+public interface SACClientCredentialsProvider {
+
+    /**
+     * Get the client id
+     * @return the client id
+     */
+    String getClientId();
+
+    /**
+     * Get the client secret
+     * @return the client secret
+     */
+    String getClientSecret();
 }

@@ -25,10 +25,18 @@ import lombok.Value;
 @Builder
 public class SACTokenResponse {
 
-    private final String tokenValue;
+    /**
+     * The access_token field
+     */
+    private final String accessToken;
 
-    private final long expiresIn;
-
+    /**
+     * The token_type field
+     */
     private final String tokenType;
-    
+
+    /**
+     * The expires_in field
+     */
+    private final long expiresIn;
 }

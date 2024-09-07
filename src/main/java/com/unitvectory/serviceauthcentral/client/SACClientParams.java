@@ -13,27 +13,34 @@
  */
 package com.unitvectory.serviceauthcentral.client;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import org.junit.jupiter.api.Test;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Value;
 
 /**
- * Test class for SACTokenResponse class.
+ *  The SACClientParams class provides the parameters for the SACClient.
  * 
  * @author Jared Hatfield (UnitVectorY Labs)
  */
-public class SACTokenResponseTest {
-    
-    @Test
-    public void test(){
-        SACTokenResponse response = SACTokenResponse.builder()
-            .accessToken("token")
-            .expiresIn(1000)
-            .tokenType("type")
-            .build();
-        
-        assertEquals("token", response.getAccessToken());
-        assertEquals(1000, response.getExpiresIn());
-        assertEquals("type", response.getTokenType());
-    }
+@Value
+@Getter(AccessLevel.PACKAGE)
+@Builder
+public class SACClientParams {
+
+    /**
+     * The issuer
+     */
+    String issuer;
+
+    /**
+     * The jwt-bearer provider
+     */
+    SACJwtBearerProvider jwtBearerProvider;
+
+    /**
+     * The client credentials provider
+     */
+    SACClientCredentialsProvider clientCredentialsProvider;
+
 }
