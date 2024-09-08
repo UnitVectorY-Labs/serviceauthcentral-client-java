@@ -13,18 +13,40 @@
  */
 package com.unitvectory.serviceauthcentral.client;
 
+import java.util.Map;
+
+import lombok.Builder;
+import lombok.Value;
+
 /**
- * The SACCredentialsProvider interface provides a base interface for accessing
- * the credentials for authenticating to ServiceAuthCentral.
+ * Provides the container for the client credentials when authenticating to
+ * ServiceAuthCentral.
  * 
  * @author Jared Hatfield (UnitVectorY Labs)
  */
-public interface SACCredentialsProvider {
+@Value
+@Builder
+public final class ClientCredentials implements SACCredentials {
 
     /**
-     * Get the credentials for authenticating to ServiceAuthCentral.
-     * 
-     * @return The credentials.
+     * The client id
      */
-    SACCredentials getCredentials();
+    String clientId;
+
+    /**
+     * The client secret
+     */
+    String clientSecret;
+
+    @Override
+    public Map<String, String> credentialsMap() {
+        return Map.of("grant_type", "client_credentials", "client_id", this.clientId, "client_secret",
+                this.clientSecret);
+    }
+
+    @Override
+    public boolean isExpired() {
+        // Static credentials never expire
+        return false;
+    }
 }

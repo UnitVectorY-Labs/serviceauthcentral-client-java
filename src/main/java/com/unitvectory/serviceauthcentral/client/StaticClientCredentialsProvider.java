@@ -13,6 +13,7 @@
  */
 package com.unitvectory.serviceauthcentral.client;
 
+import lombok.Builder;
 import lombok.NonNull;
 
 /**
@@ -21,20 +22,21 @@ import lombok.NonNull;
  * 
  * @author Jared Hatfield (UnitVectorY Labs)
  */
-public class StaticClientCredentialsProvider implements SACCredentialsProvider {
+public class StaticClientCredentialsProvider implements CredentialsProvider {
 
     /**
      * The client credentials
      */
-    private final SACClientCredentials credentials;
+    private final ClientCredentials credentials;
 
     /**
      * Create a new StaticClientCredentialsProvider
      * @param clientId The client id
      * @param clientSecret The client secret
      */
-    public StaticClientCredentialsProvider(@NonNull String clientId, @NonNull String clientSecret) {
-        this.credentials = SACClientCredentials.builder().clientId(clientId).clientSecret(clientSecret).build();
+    @Builder
+    private StaticClientCredentialsProvider(@NonNull String clientId, @NonNull String clientSecret) {
+        this.credentials = ClientCredentials.builder().clientId(clientId).clientSecret(clientSecret).build();
     }
 
     @Override

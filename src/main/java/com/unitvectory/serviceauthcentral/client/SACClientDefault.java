@@ -25,6 +25,7 @@ import java.util.Map;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import lombok.Builder;
 import lombok.NonNull;
 
 /**
@@ -41,6 +42,11 @@ public class SACClientDefault implements SACClient {
     private static final String TOKEN_PATH = "/v1/token";
 
     /**
+     * The default user agent
+     */
+    private static final String DEFAULT_USER_AGENT = "serviceauthcentral-client-java";
+
+    /**
      * The http client
      */
     private final HttpClient httpClient;
@@ -52,37 +58,51 @@ public class SACClientDefault implements SACClient {
 
     /**
      * The complete url for the token endpoint.
+     * 
+     * If this is not provided the issuer is used suffixed with "/v1/token"
      */
     private final String tokenEndpoint;
 
     /**
      * The credentials provider used to authenticate to ServiceAuthCentral.
      */
-    private final SACCredentialsProvider credentialsProvider;
+    private final CredentialsProvider credentialsProvider;
 
     /**
-     * The user agent
+     * The user agent to use when making requests.
+     * 
+     * This can be customized to identify the client making the request.
+     * 
      */
     private final String userAgent;
 
-    /**
-     * Create a new instance of the SACApiClient class
-     * 
-     * @param clientParams the client parameters
-     */
-    public SACClientDefault(@NonNull SACClientParams clientParams) {
+    @Builder
+    private SACClientDefault(HttpClient httpClient,
+            @NonNull String issuer,
+            String tokenEndpoint,
+            @NonNull CredentialsProvider credentialsProvider,
+            String userAgent) {
 
-        this.httpClient = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(10)).build();
-
-        this.issuer = clientParams.getIssuer();
-        if (clientParams.getTokenEndpoint() == null) {
-            this.tokenEndpoint = this.issuer + TOKEN_PATH;
+        if (httpClient == null) {
+            this.httpClient = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(10)).build();
         } else {
-            this.tokenEndpoint = clientParams.getTokenEndpoint();
+            this.httpClient = httpClient;
         }
 
-        this.credentialsProvider = clientParams.getCredentialsProvider();
-        this.userAgent = clientParams.getUserAgent();
+        this.issuer = issuer;
+
+        if (tokenEndpoint == null) {
+            this.tokenEndpoint = this.issuer + TOKEN_PATH;
+        } else {
+            this.tokenEndpoint = tokenEndpoint;
+        }
+
+        this.credentialsProvider = credentialsProvider;
+        if (userAgent == null) {
+            this.userAgent = DEFAULT_USER_AGENT;
+        } else {
+            this.userAgent = userAgent;
+        }
     }
 
     @Override

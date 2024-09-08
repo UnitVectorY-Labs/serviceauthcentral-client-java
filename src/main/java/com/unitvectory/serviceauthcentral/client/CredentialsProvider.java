@@ -13,27 +13,18 @@
  */
 package com.unitvectory.serviceauthcentral.client;
 
-import java.util.Map;
-
 /**
- * Provides the container for the credentials when authenticating to
- * ServiceAuthCentral.
+ * The CredentialsProvider interface provides a base interface for accessing
+ * the credentials for authenticating to ServiceAuthCentral.
  * 
  * @author Jared Hatfield (UnitVectorY Labs)
  */
-public sealed interface SACCredentials permits ClientCredentials, JwtAssertionCredentials {
+public interface CredentialsProvider {
 
     /**
-     * Checks if the credentials are expired.
+     * Get the credentials for authenticating to ServiceAuthCentral.
      * 
-     * @return True if the credentials are expired.
+     * @return The credentials.
      */
-    boolean isExpired();
-
-    /**
-     * The credentials as a map used for the OAuth request.
-     * 
-     * @return The credentials as a map.
-     */
-    Map<String, String> credentialsMap();
+    SACCredentials getCredentials();
 }

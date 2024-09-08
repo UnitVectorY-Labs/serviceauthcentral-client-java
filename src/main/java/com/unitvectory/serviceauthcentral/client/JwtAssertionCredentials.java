@@ -13,40 +13,40 @@
  */
 package com.unitvectory.serviceauthcentral.client;
 
+import java.time.Instant;
 import java.util.Map;
 
 import lombok.Builder;
 import lombok.Value;
 
 /**
- * Provides the container for the client credentials when authenticating to
- * ServiceAuthCentral.
+ * Provides the container for the jwt assertion credentials when authenticating
+ * to ServiceAuthCentral.
  * 
  * @author Jared Hatfield (UnitVectorY Labs)
  */
 @Value
 @Builder
-public final class SACClientCredentials implements SACCredentials {
+public final class JwtAssertionCredentials implements SACCredentials {
 
     /**
-     * The client id
+     * The jwt assertion
      */
-    String clientId;
+    String jwtAssertion;
 
     /**
-     * The client secret
+     * The expiration time
      */
-    String clientSecret;
+    @Builder.Default
+    Instant expiration = Instant.now();
 
     @Override
     public Map<String, String> credentialsMap() {
-        return Map.of("grant_type", "client_credentials", "client_id", this.clientId, "client_secret",
-                this.clientSecret);
+        return Map.of("grant_type", "urn:ietf:params:oauth:grant-type:jwt-bearer", "assertion", this.jwtAssertion);
     }
 
     @Override
     public boolean isExpired() {
-        // Static credentials never expire
-        return false;
+        return this.expiration.isBefore(Instant.now());
     }
 }

@@ -13,17 +13,20 @@
  */
 package com.unitvectory.serviceauthcentral.client;
 
+import lombok.Builder;
+import lombok.NonNull;
+
 /**
  * The CachingCredentialsDecorator class provides a way to cache credentials from a credentials provider.
  * 
  * @author Jared Hatfield (UnitVectorY Labs)
  */
-public class CachingCredentialsDecorator implements SACCredentialsProvider {
+public class CachingCredentialsDecorator implements CredentialsProvider {
 
     /**
      * The credentials provider we are decorating with caching.
      */
-    private final SACCredentialsProvider provider;
+    private final CredentialsProvider provider;
 
     /**
      * The cached credentials.
@@ -35,7 +38,8 @@ public class CachingCredentialsDecorator implements SACCredentialsProvider {
      * 
      * @param provider the credentials provider to decorate.
      */
-    public CachingCredentialsDecorator(SACCredentialsProvider provider) {
+    @Builder
+    private CachingCredentialsDecorator(@NonNull CredentialsProvider provider) {
         this.provider = provider;
         this.cachedCredentials = null;
     }
