@@ -17,11 +17,12 @@ import lombok.Builder;
 import lombok.NonNull;
 
 /**
- * The CachingCredentialsDecorator class provides a way to cache credentials from a credentials provider.
+ * The CachingCredentialsProviderDecorator class provides a way to cache
+ * credentials from a credentials provider.
  * 
  * @author Jared Hatfield (UnitVectorY Labs)
  */
-public class CachingCredentialsDecorator implements CredentialsProvider {
+public class CachingCredentialsProviderDecorator implements CredentialsProvider {
 
     /**
      * The credentials provider we are decorating with caching.
@@ -39,7 +40,7 @@ public class CachingCredentialsDecorator implements CredentialsProvider {
      * @param provider the credentials provider to decorate.
      */
     @Builder
-    private CachingCredentialsDecorator(@NonNull CredentialsProvider provider) {
+    private CachingCredentialsProviderDecorator(@NonNull CredentialsProvider provider) {
         this.provider = provider;
         this.cachedCredentials = null;
     }

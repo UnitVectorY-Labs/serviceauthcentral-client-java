@@ -56,4 +56,15 @@ public class TokenResponse {
         this.expiresIn = expiresIn;
         this.created = Instant.now();
     }
+
+    boolean isHalfwayExpired() {
+        // If the token is more than halfway expired (minus 30 seconds), consider it
+        // expired
+        return this.created.plusSeconds(this.expiresIn / 2).minusSeconds(30).isBefore(Instant.now());
+    }
+
+    boolean isExpired() {
+        // Treating as expired 30 seconds before it actually expires
+        return this.created.plusSeconds(this.expiresIn).minusSeconds(30).isBefore(Instant.now());
+    }
 }
