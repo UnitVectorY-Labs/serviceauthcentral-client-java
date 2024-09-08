@@ -13,23 +13,14 @@
  */
 package com.unitvectory.serviceauthcentral.client;
 
+import lombok.experimental.StandardException;
+
 /**
- * The SACClientCredentialsProvider interface provides the means to load in the
- * client id and client secret.
+ * The SACException class is the base exception for the ServiceAuthCentral client.
  * 
  * @author Jared Hatfield (UnitVectorY Labs)
  */
-public interface SACClientCredentialsProvider {
+@StandardException
+public class SACException extends RuntimeException {
 
-    /**
-     * Get the client id
-     * @return the client id
-     */
-    String getClientId();
-
-    /**
-     * Get the client secret
-     * @return the client secret
-     */
-    String getClientSecret();
 }

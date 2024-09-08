@@ -13,20 +13,40 @@
  */
 package com.unitvectory.serviceauthcentral.client;
 
+import java.util.Map;
+
+import lombok.Builder;
+import lombok.Value;
+
 /**
- * The SACJwtBearerProvider interface provides the means to load in the JWT for
- * the jwt-bearer flow.
+ * Provides the container for the client credentials when authenticating to
+ * ServiceAuthCentral.
  * 
  * @author Jared Hatfield (UnitVectorY Labs)
  */
-public interface SACJwtBearerProvider {
+@Value
+@Builder
+public final class SACClientCredentials implements SACCredentials {
 
     /**
-     * Get the JWT assertion for the jwt-bearer flow.
-     * 
-     * @param params the jwt-bearer parameters
-     * @return the JWT assertion to be passed to the ServiceAuthCentral in the
-     *         jwt-bearer flow
+     * The client id
      */
-    String getJwtAssertion(SACJwtBearerParams params);
+    String clientId;
+
+    /**
+     * The client secret
+     */
+    String clientSecret;
+
+    @Override
+    public Map<String, String> credentialsMap() {
+        return Map.of("grant_type", "client_credentials", "client_id", this.clientId, "client_secret",
+                this.clientSecret);
+    }
+
+    @Override
+    public boolean isExpired() {
+        // Static credentials never expire
+        return false;
+    }
 }

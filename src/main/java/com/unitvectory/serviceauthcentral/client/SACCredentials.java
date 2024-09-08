@@ -13,27 +13,27 @@
  */
 package com.unitvectory.serviceauthcentral.client;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import org.junit.jupiter.api.Test;
+import java.util.Map;
 
 /**
- * Test class for SACTokenResponse class.
+ * Provides the container for the credentials when authenticating to
+ * ServiceAuthCentral.
  * 
  * @author Jared Hatfield (UnitVectorY Labs)
  */
-public class SACTokenResponseTest {
-    
-    @Test
-    public void test(){
-        SACTokenResponse response = SACTokenResponse.builder()
-            .accessToken("token")
-            .expiresIn(1000)
-            .tokenType("type")
-            .build();
-        
-        assertEquals("token", response.getAccessToken());
-        assertEquals(1000, response.getExpiresIn());
-        assertEquals("type", response.getTokenType());
-    }
+public sealed interface SACCredentials permits SACClientCredentials, SACJwtAssertionCredentials {
+
+    /**
+     * Checks if the credentials are expired.
+     * 
+     * @return True if the credentials are expired.
+     */
+    boolean isExpired();
+
+    /**
+     * The credentials as a map used for the OAuth request.
+     * 
+     * @return The credentials as a map.
+     */
+    Map<String, String> credentialsMap();
 }

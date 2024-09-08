@@ -13,26 +13,47 @@
  */
 package com.unitvectory.serviceauthcentral.client;
 
+import java.time.Instant;
+
+import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.Value;
 
 /**
- * The SACClientCredentialsProvider interface provides the means to load in the
- * client id and client secret.
+ * The ServiceAuthCentral token response.
  * 
  * @author Jared Hatfield (UnitVectorY Labs)
  */
 @Value
-@Builder
-public class SACClientCredentialsProviderStatic implements SACClientCredentialsProvider {
+public class TokenResponse {
 
     /**
-     * The client id
+     * The access_token field
      */
-    String clientId;
+    private final String accessToken;
 
     /**
-     * The client secret
+     * The token_type field
      */
-    String clientSecret;
+    private final String tokenType;
+
+    /**
+     * The expires_in field
+     */
+    private final long expiresIn;
+
+    /**
+     * The created field, package-private
+     */
+    @Getter(AccessLevel.PACKAGE)
+    private final Instant created;
+
+    @Builder
+    private TokenResponse(String accessToken, String tokenType, long expiresIn) {
+        this.accessToken = accessToken;
+        this.tokenType = tokenType;
+        this.expiresIn = expiresIn;
+        this.created = Instant.now();
+    }
 }

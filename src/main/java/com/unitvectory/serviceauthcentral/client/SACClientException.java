@@ -13,15 +13,37 @@
  */
 package com.unitvectory.serviceauthcentral.client;
 
-import lombok.experimental.StandardException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
+import lombok.Getter;
 
 /**
- * The SACApiClient class provides the means to interact with the
- * ServiceAuthCentral
+ * The SACClientException class is the exception thrown by the ServiceAuthCentral client when the client receives an error from the server.
  * 
  * @author Jared Hatfield (UnitVectorY Labs)
  */
-@StandardException
-public class SACClientException extends RuntimeException {
+@Getter
+public class SACClientException extends SACException {
 
+    private final String error;
+
+    private final List<String> messages;
+
+    private final int status;
+
+    SACClientException(JsonObject json) {
+        super("Client failed to get token.");
+
+        this.error = json.get("error").getAsString();
+        this.messages = Arrays.asList(json.get("messages").getAsJsonArray())
+            .stream()
+            .map(JsonElement::getAsString)
+            .collect(Collectors.toList());
+        this.status = json.get("status").getAsInt();
+    }
 }

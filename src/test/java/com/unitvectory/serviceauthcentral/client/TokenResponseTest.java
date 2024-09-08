@@ -14,31 +14,26 @@
 package com.unitvectory.serviceauthcentral.client;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
 /**
- * Test class for SACTokenRequest class.
+ * Test class for SACTokenResponse class.
  * 
  * @author Jared Hatfield (UnitVectorY Labs)
  */
-public class SACTokenRequestTest {
+class TokenResponseTest {
 
     @Test
-    public void testSACTokenRequestBuilder() {
-        String audience = "test-audience";
-        Set<String> scopes = Set.of("scope1", "scope2");
-
-        SACTokenRequest tokenRequest = SACTokenRequest.builder()
-                .audience(audience)
-                .scopes(scopes)
+    void test() {
+        TokenResponse response = TokenResponse.builder()
+                .accessToken("token")
+                .expiresIn(1000)
+                .tokenType("type")
                 .build();
 
-        assertEquals(audience, tokenRequest.getAudience());
-        assertEquals(scopes.size(), tokenRequest.getScopes().size());
-        assertTrue(tokenRequest.getScopes().containsAll(scopes));
+        assertEquals("token", response.getAccessToken());
+        assertEquals(1000, response.getExpiresIn());
+        assertEquals("type", response.getTokenType());
     }
 }

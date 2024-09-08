@@ -14,24 +14,31 @@
 package com.unitvectory.serviceauthcentral.client;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.Set;
+
 import org.junit.jupiter.api.Test;
 
-class UrlFormEncoderTest {
+/**
+ * Test class for SACTokenRequest class.
+ * 
+ * @author Jared Hatfield (UnitVectorY Labs)
+ */
+class TokenRequestTest {
 
     @Test
-    void testEncodeFormParams() {
-        // Create a map of parameters
-        Map<String, String> params = new LinkedHashMap<>();
-        params.put("param1", "value1");
-        params.put("param2", "value2");
-        params.put("param3", "value3");
+    void testSACTokenRequestBuilder() {
+        String audience = "test-audience";
+        Set<String> scopes = Set.of("scope1", "scope2");
 
-        // Encode the parameters
-        String encodedParams = UrlFormEncoder.encodeFormParams(params);
+        TokenRequest tokenRequest = TokenRequest.builder()
+                .audience(audience)
+                .scopes(scopes)
+                .build();
 
-        // Verify the encoded string
-        assertEquals("param1=value1&param2=value2&param3=value3", encodedParams);
+        assertEquals(audience, tokenRequest.getAudience());
+        assertEquals(scopes.size(), tokenRequest.getScopes().size());
+        assertTrue(tokenRequest.getScopes().containsAll(scopes));
     }
 }

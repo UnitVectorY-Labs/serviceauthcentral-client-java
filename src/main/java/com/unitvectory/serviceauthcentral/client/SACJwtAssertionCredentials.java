@@ -13,30 +13,40 @@
  */
 package com.unitvectory.serviceauthcentral.client;
 
+import java.time.Instant;
+import java.util.Map;
+
 import lombok.Builder;
 import lombok.Value;
 
 /**
- * The ServiceAuthCentral token response.
+ * Provides the container for the jwt assertion credentials when authenticating
+ * to ServiceAuthCentral.
  * 
  * @author Jared Hatfield (UnitVectorY Labs)
  */
 @Value
 @Builder
-public class SACTokenResponse {
+public final class SACJwtAssertionCredentials implements SACCredentials {
 
     /**
-     * The access_token field
+     * The jwt assertion
      */
-    private final String accessToken;
+    String jwtAssertion;
 
     /**
-     * The token_type field
+     * The expiration time
      */
-    private final String tokenType;
+    @Builder.Default
+    Instant expiration = Instant.now();
 
-    /**
-     * The expires_in field
-     */
-    private final long expiresIn;
+    @Override
+    public Map<String, String> credentialsMap() {
+        return Map.of("grant_type", "urn:ietf:params:oauth:grant-type:jwt-bearer", "assertion", this.jwtAssertion);
+    }
+
+    @Override
+    public boolean isExpired() {
+        return this.expiration.isBefore(Instant.now());
+    }
 }

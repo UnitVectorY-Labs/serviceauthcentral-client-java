@@ -28,12 +28,12 @@ import com.google.gson.JsonParser;
 import lombok.NonNull;
 
 /**
- * The SACApiClient class provides the means to interact with the
- * ServiceAuthCentral
+ * The SACClientDefault class is the default implementation of the SACClient
+ * calling the ServiceAuthCentral API.
  * 
  * @author Jared Hatfield (UnitVectorY Labs)
  */
-public class SACApiClient implements SACClient {
+public class SACClientDefault implements SACClient {
 
     /**
      * The path to the token endpoint
@@ -56,14 +56,9 @@ public class SACApiClient implements SACClient {
     private final String tokenEndpoint;
 
     /**
-     * The jwt-bearer provider
+     * The credentials provider used to authenticate to ServiceAuthCentral.
      */
-    private final SACJwtBearerProvider jwtBearerProvider;
-
-    /**
-     * The client credentials provider
-     */
-    private final SACClientCredentialsProvider clientCredentialsProvider;
+    private final SACCredentialsProvider credentialsProvider;
 
     /**
      * The user agent
@@ -75,7 +70,7 @@ public class SACApiClient implements SACClient {
      * 
      * @param clientParams the client parameters
      */
-    public SACApiClient(@NonNull SACClientParams clientParams) {
+    public SACClientDefault(@NonNull SACClientParams clientParams) {
 
         this.httpClient = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(10)).build();
 
@@ -86,20 +81,19 @@ public class SACApiClient implements SACClient {
             this.tokenEndpoint = clientParams.getTokenEndpoint();
         }
 
-        this.jwtBearerProvider = clientParams.getJwtBearerProvider();
-        this.clientCredentialsProvider = clientParams.getClientCredentialsProvider();
+        this.credentialsProvider = clientParams.getCredentialsProvider();
         this.userAgent = clientParams.getUserAgent();
     }
 
     @Override
-    public SACTokenResponse getToken(@NonNull SACTokenRequest request) {
+    public TokenResponse getToken(@NonNull TokenRequest request) {
 
         Map<String, String> params = new HashMap<>();
         if (request.getAudience() != null) {
             params.put("audience", request.getAudience());
         } else {
             // ServiceAuthCentral is an authorization server, so it must have an audience
-            throw new SACClientException("Audience is required");
+            throw new SACException("Audience is required");
         }
 
         if (request.getScopes() != null && request.getScopes().size() > 0) {
@@ -107,27 +101,17 @@ public class SACApiClient implements SACClient {
             params.put("scope", String.join(" ", request.getScopes()));
         }
 
-        if (this.jwtBearerProvider != null) {
-            // Always prefer jwt-bearer flow if available
-            params.put("grant_type", "urn:ietf:params:oauth:grant-type:jwt-bearer");
-            SACJwtBearerParams jwtBearerParams = SACJwtBearerParams.builder()
-                    .audience(request.getAudience())
-                    .build();
-            params.put("assertion", this.jwtBearerProvider.getJwtAssertion(jwtBearerParams));
-        } else if (this.clientCredentialsProvider != null) {
-            // Fall back to client credentials flow
-            params.put("grant_type", "client_credentials");
-            params.put("client_id", this.clientCredentialsProvider.getClientId());
-            params.put("client_secret", this.clientCredentialsProvider.getClientSecret());
-        } else {
-            // No way to authenticate
-            throw new SACClientException("No client credentials provider or jwt bearer provider set");
+        SACCredentials credentials = this.credentialsProvider.getCredentials();
+        if (credentials.isExpired()) {
+            throw new SACException("Credentials are expired");
         }
+
+        params.putAll(credentials.credentialsMap());
 
         return this.getToken(params);
     }
 
-    private SACTokenResponse getToken(Map<String, String> params) {
+    private TokenResponse getToken(Map<String, String> params) {
         HttpRequest httpRequest = HttpRequest.newBuilder()
                 .uri(URI.create(this.tokenEndpoint))
                 .header("Content-Type", "application/x-www-form-urlencoded")
@@ -138,11 +122,10 @@ public class SACApiClient implements SACClient {
         try {
             HttpResponse<String> response = this.httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
-            // if the response isn't 200 then return an error
+            // If the response isn't 200 then return an error
             if (response.statusCode() != 200) {
-                // TODO: Parse out the responses that ServiceAuthCentral returns and include those in the exception for better debugging
-                System.out.println(response.body());
-                throw new SACClientException("Failed to get token with response code " + response.statusCode());
+                throw new SACClientException(JsonParser.parseString(response.body())
+                        .getAsJsonObject());
             }
 
             JsonObject responseJson = JsonParser.parseString(response.body()).getAsJsonObject();
@@ -150,16 +133,16 @@ public class SACApiClient implements SACClient {
             // Validate the expected fields exist
             if (!responseJson.has("access_token") || !responseJson.has("expires_in")
                     || !responseJson.has("token_type")) {
-                throw new SACClientException("Unexpected token response format: " + responseJson.toString());
+                throw new SACException("Unexpected token response format.");
             }
 
-            return SACTokenResponse.builder()
+            return TokenResponse.builder()
                     .accessToken(responseJson.get("access_token").getAsString())
                     .expiresIn(responseJson.get("expires_in").getAsLong())
                     .tokenType(responseJson.get("token_type").getAsString())
                     .build();
         } catch (IOException | InterruptedException e) {
-            throw new SACClientException("Failed to get token", e);
+            throw new SACException("Failed to get token", e);
         }
     }
 

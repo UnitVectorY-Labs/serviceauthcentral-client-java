@@ -14,8 +14,8 @@
 package com.unitvectory.serviceauthcentral.client;
 
 /**
- * The ServiceAuthCentralClient interface provides a way to interact with the
- * ServiceAuthCentral
+ * The SACClient interface provides a way to interact with the
+ * ServiceAuthCentral API.
  * 
  * @author Jared Hatfield (UnitVectorY Labs)
  */
@@ -27,5 +27,5 @@ public interface SACClient {
      * @param request the token request
      * @return the token response
      */
-    SACTokenResponse getToken(SACTokenRequest request);
+    TokenResponse getToken(TokenRequest request);
 }

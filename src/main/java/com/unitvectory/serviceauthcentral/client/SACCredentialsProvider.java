@@ -13,20 +13,18 @@
  */
 package com.unitvectory.serviceauthcentral.client;
 
-import lombok.Builder;
-import lombok.Value;
-
 /**
- * The SACJwtBearerParams class provides the parameters for the jwt-bearer flow.
+ * The SACCredentialsProvider interface provides a base interface for accessing
+ * the credentials for authenticating to ServiceAuthCentral.
  * 
  * @author Jared Hatfield (UnitVectorY Labs)
  */
-@Value
-@Builder
-public class SACJwtBearerParams {
+public interface SACCredentialsProvider {
 
     /**
-     * The audience
+     * Get the credentials for authenticating to ServiceAuthCentral.
+     * 
+     * @return The credentials.
      */
-    String audience;
+    SACCredentials getCredentials();
 }

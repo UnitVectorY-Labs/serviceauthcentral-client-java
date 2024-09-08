@@ -41,14 +41,9 @@ public class SACClientParams {
     String tokenEndpoint;
 
     /**
-     * The jwt-bearer provider
+     * The credentials provider used to authenticate to ServiceAuthCentral.
      */
-    SACJwtBearerProvider jwtBearerProvider;
-
-    /**
-     * The client credentials provider
-     */
-    SACClientCredentialsProvider clientCredentialsProvider;
+    SACCredentialsProvider credentialsProvider;
 
     /**
      * The user agent to use when making requests.

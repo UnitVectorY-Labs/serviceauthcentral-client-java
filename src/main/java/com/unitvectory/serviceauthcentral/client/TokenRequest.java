@@ -28,28 +28,28 @@ import lombok.Value;
  */
 @Value
 @Builder
-public class SACTokenRequest {
+public class TokenRequest {
 
     private final String audience;
 
     private final Set<String> scopes;
 
-    public static class SACTokenRequestBuilder {
+    public static class TokenRequestBuilder {
         private Set<String> scopes = new HashSet<>();
 
-        public SACTokenRequestBuilder scopes(Set<String> scopes) {
+        public TokenRequestBuilder scopes(Set<String> scopes) {
             this.scopes = new HashSet<>(scopes);
             return this;
         }
 
-        public SACTokenRequestBuilder scope(String scope) {
+        public TokenRequestBuilder scope(String scope) {
             this.scopes.add(scope);
             return this;
         }
 
-        public SACTokenRequest build() {
+        public TokenRequest build() {
             this.scopes = Collections.unmodifiableSet(new TreeSet<String>(this.scopes));
-            return new SACTokenRequest(audience, scopes);
+            return new TokenRequest(audience, scopes);
         }
     }
 }
