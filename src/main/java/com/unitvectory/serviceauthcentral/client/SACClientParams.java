@@ -19,7 +19,7 @@ import lombok.Getter;
 import lombok.Value;
 
 /**
- *  The SACClientParams class provides the parameters for the SACClient.
+ * The SACClientParams class provides the parameters for the SACClient.
  * 
  * @author Jared Hatfield (UnitVectorY Labs)
  */
@@ -34,6 +34,13 @@ public class SACClientParams {
     String issuer;
 
     /**
+     * The complete url for the token endpoint.
+     * 
+     * If this is not provided the issuer is used suffixed with "/v1/token"
+     */
+    String tokenEndpoint;
+
+    /**
      * The jwt-bearer provider
      */
     SACJwtBearerProvider jwtBearerProvider;
@@ -43,4 +50,13 @@ public class SACClientParams {
      */
     SACClientCredentialsProvider clientCredentialsProvider;
 
+    /**
+     * The user agent to use when making requests.
+     * 
+     * This can be customized to identify the client making the request.
+     * 
+     * The default value if not specified will be "serviceauthcentral-client-java"
+     */
+    @Builder.Default
+    String userAgent = "serviceauthcentral-client-java";
 }
