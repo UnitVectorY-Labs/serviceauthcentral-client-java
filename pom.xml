@@ -9,7 +9,7 @@
     <packaging>jar</packaging>
 
     <name>serviceauthcentral-client</name>
-    <description>Library for creating parameterized JUnit 5 tests based on JSON files.</description>
+    <description>Java client for requesting tokens from the ServiceAuthCentral OAuth 2.0 authorization server.</description>
     <url>https://github.com/UnitVectorY-Labs/serviceauthcentral-client-java</url>
 
     <licenses>
