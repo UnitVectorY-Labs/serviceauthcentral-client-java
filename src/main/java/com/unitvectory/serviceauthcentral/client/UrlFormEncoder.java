@@ -19,11 +19,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import lombok.experimental.UtilityClass;
+
 /**
  * The UrlFormEncoder class provides the means to encode parameters as x-www-form-urlencoded format.
  * 
  * @author Jared Hatfield (UnitVectorY Labs)
  */
+@UtilityClass
 class UrlFormEncoder {
     /**
      * Encodes the parameters as x-www-form-urlencoded format.

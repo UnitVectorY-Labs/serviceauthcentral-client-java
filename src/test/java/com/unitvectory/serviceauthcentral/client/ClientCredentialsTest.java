@@ -21,14 +21,14 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 /**
- * Test class for ClientCredentialsTest class.
+ * Test class for ClientCredentials class.
  * 
  * @author Jared Hatfield (UnitVectorY Labs)
  */
-public class ClientCredentialsTest {
+class ClientCredentialsTest {
 
     @Test
-    public void testCredentialsMap() {
+    void testCredentialsMap() {
         ClientCredentials credentials = ClientCredentials.builder()
                 .clientId("foo")
                 .clientSecret("secret")
@@ -42,7 +42,7 @@ public class ClientCredentialsTest {
     }
 
     @Test
-    public void testIsExpired() {
+    void testIsExpired() {
         ClientCredentials credentials = ClientCredentials.builder()
                 .clientId("foo")
                 .clientSecret("secret")
