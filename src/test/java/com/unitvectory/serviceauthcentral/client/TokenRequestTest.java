@@ -41,4 +41,19 @@ class TokenRequestTest {
         assertEquals(scopes.size(), tokenRequest.getScopes().size());
         assertTrue(tokenRequest.getScopes().containsAll(scopes));
     }
+
+    @Test
+    void testSACTokenRequestBuilderScope() {
+        String audience = "test-audience";
+        String scope = "read";
+
+        TokenRequest tokenRequest = TokenRequest.builder()
+                .audience(audience)
+                .scope(scope)
+                .build();
+
+        assertEquals(audience, tokenRequest.getAudience());
+        assertEquals(1, tokenRequest.getScopes().size());
+        assertTrue(tokenRequest.getScopes().contains(scope));
+    }
 }

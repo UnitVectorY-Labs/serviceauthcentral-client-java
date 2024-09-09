@@ -14,6 +14,7 @@
 package com.unitvectory.serviceauthcentral.client;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.junit.jupiter.api.Test;
 
@@ -35,5 +36,7 @@ class TokenResponseTest {
         assertEquals("token", response.getAccessToken());
         assertEquals(1000, response.getExpiresIn());
         assertEquals("type", response.getTokenType());
+        assertFalse(response.isExpired());
+        assertFalse(response.isHalfwayExpired());
     }
 }
