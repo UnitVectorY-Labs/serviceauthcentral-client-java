@@ -13,6 +13,9 @@
  */
 package com.unitvectory.serviceauthcentral.client;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.Signature;
@@ -21,6 +24,11 @@ import java.time.Instant;
 import java.util.Base64;
 import java.util.Map;
 import java.util.TreeMap;
+
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -150,5 +158,42 @@ public class LocalJwtCredentialsProvider implements CredentialsProvider {
         ;
 
         private String signature;
+    }
+
+    /**
+     * Loads a Google Cloud Platform service account file and returns a builder for
+     * use in creating a LocalJwtCredentialsProvider.
+     * 
+     * This loads in the following fields from the JSON file:
+     * - issuer: client_email
+     * - subject: client_email
+     * - privateKeyPem: private_key
+     * - keyId: private_key_id
+     * 
+     * The builder will need to have the following fields set to complete the
+     * initializtion:
+     * - clientId
+     * - audience
+     * 
+     * @param credentialsFile the service account credentials file in JSON format
+     * @return a builder for creating a LocalJwtCredentialsProvider
+     */
+    public static LocalJwtCredentialsProviderBuilder loadGCPServiceAccountFile(File credentialsFile) {
+
+        LocalJwtCredentialsProviderBuilder builder = LocalJwtCredentialsProvider.builder();
+
+        try (FileReader reader = new FileReader(credentialsFile)) {
+            JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
+
+            builder.issuer(json.get("client_email").getAsString());
+            builder.subject(json.get("client_email").getAsString());
+            builder.privateKeyPem(json.get("private_key").getAsString());
+            builder.keyId(json.get("private_key_id").getAsString());
+
+        } catch (JsonIOException | JsonSyntaxException | IOException e) {
+            throw new SACException("Failed to load credentials file", e);
+        }
+
+        return builder;
     }
 }
