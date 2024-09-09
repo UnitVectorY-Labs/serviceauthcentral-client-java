@@ -52,7 +52,7 @@ public final class JwtAssertionCredentials implements SACCredentials {
     }
 
     @Override
-    public boolean isExpired() {
-        return this.expiration.isBefore(Instant.now());
+    public boolean isExpired(int threshold) {
+        return this.expiration.minusSeconds(threshold).isBefore(Instant.now());
     }
 }

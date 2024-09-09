@@ -41,6 +41,7 @@ public class TokenResponse {
     /**
      * The expires_in field
      */
+    @Getter(AccessLevel.PACKAGE)
     private final long expiresIn;
 
     /**
@@ -57,14 +58,15 @@ public class TokenResponse {
         this.created = Instant.now();
     }
 
-    boolean isHalfwayExpired() {
-        // If the token is more than halfway expired (minus 30 seconds), consider it
-        // expired
-        return this.created.plusSeconds(this.expiresIn / 2).minusSeconds(30).isBefore(Instant.now());
-    }
-
-    boolean isExpired() {
-        // Treating as expired 30 seconds before it actually expires
-        return this.created.plusSeconds(this.expiresIn).minusSeconds(30).isBefore(Instant.now());
+    /**
+     * Checks if the credentials are expired.
+     * 
+     * @param threshold the number of seconds before the expiration to consider this
+     *                  expired to avoid early expiration; pass 0 for the actual
+     *                  expiration
+     * @return True if the credentials are expired.
+     */
+    boolean isExpired(int threshold) {
+        return this.created.plusSeconds(this.expiresIn).minusSeconds(threshold).isBefore(Instant.now());
     }
 }

@@ -134,7 +134,7 @@ public class LocalJwtCredentialsProvider implements CredentialsProvider {
         String token = signatureInput + "." + signature;
 
         return JwtAssertionCredentials.builder().clientId(this.clientId).jwtAssertion(token)
-                .expiration(currentTime.plusSeconds(this.expiresIn).minusSeconds(30)).build();
+                .expiration(currentTime.plusSeconds(this.expiresIn)).build();
     }
 
     private byte[] signWithPrivateKey(byte[] data) {
@@ -161,7 +161,7 @@ public class LocalJwtCredentialsProvider implements CredentialsProvider {
     }
 
     public static class LocalJwtCredentialsProviderBuilder {
-        
+
     }
 
     /**
@@ -182,7 +182,11 @@ public class LocalJwtCredentialsProvider implements CredentialsProvider {
      * @param credentialsFile the service account credentials file in JSON format
      * @return a builder for creating a LocalJwtCredentialsProvider
      */
-    public static LocalJwtCredentialsProviderBuilder loadGCPServiceAccountFile(File credentialsFile) {
+    public static LocalJwtCredentialsProviderBuilder loadGCPServiceAccountFile(@NonNull File credentialsFile) {
+
+        if (!credentialsFile.exists()) {
+            throw new SACException("Credentials file does not exist");
+        }
 
         LocalJwtCredentialsProviderBuilder builder = LocalJwtCredentialsProvider.builder();
 

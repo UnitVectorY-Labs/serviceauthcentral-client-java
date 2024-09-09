@@ -26,9 +26,12 @@ public sealed interface SACCredentials permits ClientCredentials, JwtAssertionCr
     /**
      * Checks if the credentials are expired.
      * 
+     * @param threshold the number of seconds before the expiration to consider this
+     *                  expired to avoid early expiration; pass 0 for the actual
+     *                  expiration
      * @return True if the credentials are expired.
      */
-    boolean isExpired();
+    boolean isExpired(int threshold);
 
     /**
      * The credentials as a map used for the OAuth request.

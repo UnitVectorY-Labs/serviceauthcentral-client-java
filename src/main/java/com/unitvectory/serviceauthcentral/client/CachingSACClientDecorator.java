@@ -67,7 +67,8 @@ public class CachingSACClientDecorator implements SACClient {
             if (cachedResponse != null) {
                 // Token is cached, we need to decide how to handle it.
 
-                if (!cachedResponse.isHalfwayExpired()) {
+                int halflife = (int) cachedResponse.getExpiresIn() / 2;
+                if (!cachedResponse.isExpired(halflife)) {
                     // Token is valid and not halfway expired, use it.
                     return cachedResponse;
                 }
@@ -83,7 +84,7 @@ public class CachingSACClientDecorator implements SACClient {
 
                 } catch (Exception e) {
                     // If token request fails, fall back to the non-expired cached token.
-                    if (!cachedResponse.isExpired()) {
+                    if (!cachedResponse.isExpired(30)) {
                         return cachedResponse;
                     }
                     // If it is fully expired, we will request a new token outside this block.

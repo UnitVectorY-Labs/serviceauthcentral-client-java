@@ -51,7 +51,7 @@ public class CachingCredentialsProviderDecorator implements CredentialsProvider 
         synchronized (this) {
 
             // Clear the expired credentials
-            if (this.cachedCredentials != null && this.cachedCredentials.isExpired()) {
+            if (this.cachedCredentials != null && this.cachedCredentials.isExpired(30)) {
                 this.cachedCredentials = null;
             }
 

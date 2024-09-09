@@ -51,7 +51,7 @@ class JwtAssertionCredentialsTest {
                 .expiration(expiration)
                 .build();
 
-        Assertions.assertTrue(expiredCredentials.isExpired());
+        Assertions.assertTrue(expiredCredentials.isExpired(0));
     }
 
     @Test
@@ -61,6 +61,6 @@ class JwtAssertionCredentialsTest {
                 .expiration(futureExpiration)
                 .build();
 
-        Assertions.assertFalse(validCredentials.isExpired());
+        Assertions.assertFalse(validCredentials.isExpired(0));
     }
 }

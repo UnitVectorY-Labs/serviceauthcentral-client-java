@@ -49,6 +49,6 @@ class ClientCredentialsTest {
                 .build();
 
         // This is set to never expire
-        assertFalse(credentials.isExpired());
+        assertFalse(credentials.isExpired(0));
     }
 }

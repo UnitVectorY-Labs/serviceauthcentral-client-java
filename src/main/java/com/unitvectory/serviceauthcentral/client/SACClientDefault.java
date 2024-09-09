@@ -122,7 +122,7 @@ public class SACClientDefault implements SACClient {
         }
 
         SACCredentials credentials = this.credentialsProvider.getCredentials();
-        if (credentials.isExpired()) {
+        if (credentials.isExpired(30)) {
             throw new SACException("Credentials are expired");
         }
 

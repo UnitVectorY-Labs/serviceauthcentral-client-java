@@ -36,7 +36,6 @@ class TokenResponseTest {
         assertEquals("token", response.getAccessToken());
         assertEquals(1000, response.getExpiresIn());
         assertEquals("type", response.getTokenType());
-        assertFalse(response.isExpired());
-        assertFalse(response.isHalfwayExpired());
+        assertFalse(response.isExpired(0));
     }
 }

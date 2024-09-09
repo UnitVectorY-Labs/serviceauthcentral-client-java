@@ -45,7 +45,7 @@ public final class ClientCredentials implements SACCredentials {
     }
 
     @Override
-    public boolean isExpired() {
+    public boolean isExpired(int threshold) {
         // Static credentials never expire
         return false;
     }
