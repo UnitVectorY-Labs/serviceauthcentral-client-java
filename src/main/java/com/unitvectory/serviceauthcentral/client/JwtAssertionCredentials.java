@@ -30,6 +30,11 @@ import lombok.Value;
 public final class JwtAssertionCredentials implements SACCredentials {
 
     /**
+     * The client id
+     */
+    String clientId;
+
+    /**
      * The jwt assertion
      */
     String jwtAssertion;
@@ -42,7 +47,8 @@ public final class JwtAssertionCredentials implements SACCredentials {
 
     @Override
     public Map<String, String> credentialsMap() {
-        return Map.of("grant_type", "urn:ietf:params:oauth:grant-type:jwt-bearer", "assertion", this.jwtAssertion);
+        return Map.of("grant_type", "urn:ietf:params:oauth:grant-type:jwt-bearer", "client_id", this.clientId,
+                "assertion", this.jwtAssertion);
     }
 
     @Override
