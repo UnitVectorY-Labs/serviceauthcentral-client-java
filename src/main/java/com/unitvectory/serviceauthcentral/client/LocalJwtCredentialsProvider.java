@@ -160,6 +160,10 @@ public class LocalJwtCredentialsProvider implements CredentialsProvider {
         private String signature;
     }
 
+    public static class LocalJwtCredentialsProviderBuilder {
+        
+    }
+
     /**
      * Loads a Google Cloud Platform service account file and returns a builder for
      * use in creating a LocalJwtCredentialsProvider.
