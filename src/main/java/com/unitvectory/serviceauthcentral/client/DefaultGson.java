@@ -20,9 +20,12 @@ package com.unitvectory.serviceauthcentral.client;
  */
 import com.google.gson.Gson;
 
+import lombok.experimental.UtilityClass;
+
 /**
  * The DefaultGson class provides a default Gson instance.
  */
+@UtilityClass
 class DefaultGson {
 
     /**

@@ -14,29 +14,33 @@
 package com.unitvectory.serviceauthcentral.client;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import java.util.LinkedHashMap;
-import java.util.Map;
+
 import org.junit.jupiter.api.Test;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 /**
- * Test class for UrlFormEncoder class.
+ * Test class for SACClientException class.
  * 
  * @author Jared Hatfield (UnitVectorY Labs)
  */
-class UrlFormEncoderTest {
+class SACClientExceptionTest {
 
     @Test
-    void testEncodeFormParams() {
-        // Create a map of parameters
-        Map<String, String> params = new LinkedHashMap<>();
-        params.put("param1", "value1");
-        params.put("param2", "value2");
-        params.put("param3", "value3");
+    void testSACClientException() {
+        JsonObject json = new JsonObject();
+        json.addProperty("error", "Test Error");
+        json.addProperty("status", 500);
+        JsonArray messages = new JsonArray();
+        messages.add("Test Message");
+        json.add("messages", messages);
 
-        // Encode the parameters
-        String encodedParams = UrlFormEncoder.encodeFormParams(params);
+        SACClientException exception = new SACClientException(json);
 
-        // Verify the encoded string
-        assertEquals("param1=value1&param2=value2&param3=value3", encodedParams);
+        assertEquals("Test Error", exception.getError());
+        assertEquals(500, exception.getStatus());
+        assertEquals(1, exception.getMessages().size());
+        assertEquals("Test Message", exception.getMessages().get(0));
     }
 }
