@@ -31,10 +31,10 @@ import lombok.NonNull;
  * This is an optional dependency and requires including
  * google-auth-library-oauth2-http as it is an optional dependency.
  * 
- * <dependency>
- * <groupId>com.google.auth</groupId>
- * <artifactId>google-auth-library-oauth2-http</artifactId>
- * </dependency>
+ * &lt;dependency&gt;
+ * &lt;groupId&gt;com.google.auth&lt;/groupId&gt;
+ * &lt;artifactId&gt;google-auth-library-oauth2-http&lt;/artifactId&gt;
+ * &lt;/dependency&gt;
  * 
  * @author Jared Hatfield (UnitVectorY Labs)
  */
